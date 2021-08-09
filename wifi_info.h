@@ -1,8 +1,3 @@
-/*
- * wifi_info.h
- * From: https://github.com/Mixiaoxiao/Arduino-HomeKit-ESP8266/blob/master/examples/Example02_Switch/wifi_info.h
- */
-
 #ifndef WIFI_INFO_H_
 #define WIFI_INFO_H_
 
@@ -11,6 +6,11 @@
 #elif defined(ESP32)
 #include <WiFi.h>
 #endif
+
+/*
+ * wifi_info.h
+ * From: https://github.com/Mixiaoxiao/Arduino-HomeKit-ESP8266/blob/master/examples/Example02_Switch/wifi_info.h
+ */
 
 const char *ssid = "latte";
 const char *password = "****";

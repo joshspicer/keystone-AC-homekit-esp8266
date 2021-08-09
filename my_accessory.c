@@ -58,12 +58,33 @@ homekit_characteristic_t fan_active = HOMEKIT_CHARACTERISTIC_(ACTIVE, 0);
 homekit_characteristic_t fan_speed = HOMEKIT_CHARACTERISTIC_(ROTATION_SPEED, 0);
 
 homekit_accessory_t *accessories[] = {
-    HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_air_conditioner, .services=(homekit_service_t*[])) {
-        HOMEKIT_CHARACTERISTIC(NAME, "AirConditioner"),
-        HOMEKIT_CHARACTERISTIC(MANUFACTURER, "JoshSpicer"),
-        HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "0000001"),
-        HOMEKIT_CHARACTERISTIC(MODEL, "ESP8266"),
-        HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "1.0"),
-        HOMEKIT_CHARACTERISTIC(IDENTIFY, my_accessory_identify),
-    }
+    HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_air_conditioner, .services=(homekit_service_t*[]) {
+         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
+                HOMEKIT_CHARACTERISTIC(NAME, "Air Conditioner"),
+                HOMEKIT_CHARACTERISTIC(MANUFACTURER, "spicer.dev"),
+                HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "0000001"),
+                HOMEKIT_CHARACTERISTIC(MODEL, "ESP8266"),
+                HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "1.0"),
+                HOMEKIT_CHARACTERISTIC(IDENTIFY, my_accessory_identify),
+                NULL
+         }),
+        HOMEKIT_SERVICE(HEATER_COOLER, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            &cooler_active,
+            &current_temp,
+            &current_state,
+            &target_state,
+            NULL
+        }),      
+        HOMEKIT_SERVICE(FAN2, .characteristics=(homekit_characteristic_t*[]) {
+            &fan_active,
+            &fan_speed,
+            NULL
+        }),
+        NULL
+    })};
+
+
+homekit_server_config_t config = {
+		.accessories = accessories,
+		.password = "134-11-134"
 };
