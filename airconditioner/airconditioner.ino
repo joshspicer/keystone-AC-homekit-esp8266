@@ -9,6 +9,7 @@
 /*
  *  Modified on: 2021-07-13
  *  Josh Spicer <hello@joshspicer.com>
+ *  Writeup: http://spcr.me/aircon-homekit
  *      
  *  Built with the following libraries:
  *     https://github.com/Mixiaoxiao/Arduino-HomeKit-ESP8266 
@@ -18,10 +19,14 @@
 
 #define LOG_D(fmt, ...)   printf_P(PSTR(fmt "\n") , ##__VA_ARGS__);
 
+// IR settings
+const uint16_t kIrLed = 4;  // ESP8266 GPIO pin to use. Recommended: 4 (D2).
+IRMideaAC ac(kIrLed);  // Set the GPIO to be used to sending the message
+
 void setup() {
   Serial.begin(115200);
   wifi_connect(); // in wifi_info.h
-  //homekit_storage_reset(); // to remove the previous HomeKit pairing storage when you first run this new HomeKit example
+  homekit_storage_reset(); // to remove the previous HomeKit pairing storage when you first run this new HomeKit example
   my_homekit_setup();
   ac.begin();
 }
@@ -45,9 +50,12 @@ extern "C" homekit_characteristic_t fan_speed;
 
 static uint32_t next_heap_millis = 0;
 
-void cooler_active_setter(const homekit_value_t value) {
+//TEMP:
+extern "C" homekit_characteristic_t cha_switch_on;
+
+void fan_active_setter(const homekit_value_t value) {
   bool state = value.bool_value;
-  cooler_active.value.bool_value = state;  //sync the value
+  fan_active.value.bool_value = state;  //sync the value
   LOG_D("COOLER_ACTIVE: %s", state ? "ON" : "OFF");
 
   if (state) {
@@ -57,23 +65,24 @@ void cooler_active_setter(const homekit_value_t value) {
   }
 }
 
-// IR settings
-const uint16_t kIrLed = 4;  // ESP8266 GPIO pin to use. Recommended: 4 (D2).
-IRMideaAC ac(kIrLed);  // Set the GPIO to be used to sending the message
 
 void my_homekit_setup() {
+  Serial.write("starting my_homekit_setup\n");
   //Add the .setter function to get the switch-event sent from iOS Home APP.
   //The .setter should be added before arduino_homekit_setup.
   //HomeKit sever uses the .setter_ex internally, see homekit_accessories_init function.
   //Maybe this is a legacy design issue in the original esp-homekit library,
   //and I have no reason to modify this "feature".
-  cooler_active.setter = cooler_active_setter;
+  
+  fan_active.setter = fan_active_setter;
+
+  Serial.write("about to call arduino_homekit_setup\n");
   arduino_homekit_setup(&config);
 
-  //report the switch value to HomeKit if it is changed (e.g. by a physical button)
-  //bool switch_is_on = true/false;
-  //cha_switch_on.value.bool_value = switch_is_on;
-  //homekit_characteristic_notify(&cha_switch_on, cha_switch_on.value);
+  //report the switch value HERE to HomeKit if it is changed (e.g. by a physical button)
+
+
+  Serial.write("exiting my_homekit_setup\n");
 }
 
 void my_homekit_loop() {
