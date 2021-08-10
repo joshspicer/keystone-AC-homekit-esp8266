@@ -7,7 +7,7 @@
 #include <ir_Midea.h>
 
 /*
- *  Modified on: 2021-07-13
+ *  Modified on: 2021-08-10
  *  Josh Spicer <hello@joshspicer.com>
  *  Writeup: http://spcr.me/aircon-homekit
  *      
@@ -23,18 +23,33 @@
 const uint16_t kIrLed = 4;  // ESP8266 GPIO pin to use. Recommended: 4 (D2).
 IRMideaAC ac(kIrLed);  // Set the GPIO to be used to sending the message
 
+// Globals
+bool queueCommand = false;
+void flipQueueCommand(bool newState) {
+  Serial.Write("Flipping queueCommand to %d", newState);
+  queueCommand = newState;
+}
+
 void setup() {
   Serial.begin(115200);
   wifi_connect(); // in wifi_info.h
-  homekit_storage_reset(); // to remove the previous HomeKit pairing storage when you first run this new HomeKit example
+  //homekit_storage_reset(); // to remove the previous HomeKit pairing storage when you first run this new HomeKit example
   my_homekit_setup();
+  Serial.write("HomeKit setup complete. About to start ac.begin()");
   ac.begin();
 }
 
 void loop() {
   my_homekit_loop();
   delay(10);
-  ac.send();
+
+  if (queueCommand)
+  {
+    Serial.write("Sending AC Command....");
+    ac.send();
+    flipQueueCommand(false);
+  }
+  
 }
 
 // defined in my_accessory.c
@@ -44,18 +59,14 @@ extern "C" homekit_characteristic_t cooler_active;
 extern "C" homekit_characteristic_t current_temp;
 extern "C" homekit_characteristic_t current_state;
 extern "C" homekit_characteristic_t target_state;
-
-extern "C" homekit_characteristic_t fan_active;
-extern "C" homekit_characteristic_t fan_speed;
+extern "C" homekit_characteristic_t rotation_speed;
 
 static uint32_t next_heap_millis = 0;
 
-//TEMP:
-extern "C" homekit_characteristic_t cha_switch_on;
-
-void fan_active_setter(const homekit_value_t value) {
+// --- Setters
+void cooler_active_setter(const homekit_value_t value) {
   bool state = value.bool_value;
-  fan_active.value.bool_value = state;  //sync the value
+  cooler_active.value.bool_value = state;  //sync the value
   LOG_D("COOLER_ACTIVE: %s", state ? "ON" : "OFF");
 
   if (state) {
@@ -65,6 +76,24 @@ void fan_active_setter(const homekit_value_t value) {
   }
 }
 
+void current_temp_setter(const homekit_value_t value) {
+
+}
+
+void current_state_setter(const homekit_value_t value) {
+
+}
+
+void target_state_setter(const homekit_value_t value) {
+
+}
+
+void rotation_speed_setter(const homekit_value_t value) {
+
+}
+
+
+// --- End Setters
 
 void my_homekit_setup() {
   Serial.write("starting my_homekit_setup\n");
