@@ -61,7 +61,7 @@ homekit_accessory_t *accessories[] = {
            &current_temp,
            &current_state,
            &target_state,
-           &rotation_speed
+           &rotation_speed,
            NULL
        }),
         NULL

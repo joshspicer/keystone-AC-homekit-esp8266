@@ -26,14 +26,14 @@ IRMideaAC ac(kIrLed);  // Set the GPIO to be used to sending the message
 // Globals
 bool queueCommand = false;
 void flipQueueCommand(bool newState) {
-  Serial.Write("Flipping queueCommand to %d", newState);
+  Serial.write("Flipping queueCommand to %d", newState);
   queueCommand = newState;
 }
 
 void setup() {
   Serial.begin(115200);
   wifi_connect(); // in wifi_info.h
-  //homekit_storage_reset(); // to remove the previous HomeKit pairing storage when you first run this new HomeKit example
+  homekit_storage_reset(); // to remove the previous HomeKit pairing storage when you first run this new HomeKit example
   my_homekit_setup();
   Serial.write("HomeKit setup complete. About to start ac.begin()");
   ac.begin();
@@ -103,7 +103,13 @@ void my_homekit_setup() {
   //Maybe this is a legacy design issue in the original esp-homekit library,
   //and I have no reason to modify this "feature".
   
-  fan_active.setter = fan_active_setter;
+  cooler_active.setter = cooler_active_setter;
+  current_temp.setter = current_temp_setter;
+  current_state.setter = current_state_setter;
+  target_state.setter = target_state_setter;
+  rotation_speed.setter = rotation_speed_setter;
+
+}
 
   Serial.write("about to call arduino_homekit_setup\n");
   arduino_homekit_setup(&config);
