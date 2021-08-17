@@ -91,32 +91,7 @@ void current_state_setter(const homekit_value_t value) {
 }
 
 void target_state_setter(const homekit_value_t value) {
-  int oldState = target_state.value.int_value;
-  int newState = value.int_value;
-  
-  target_state.value = value; //sync value
-  current_state.value = value; // sync value
-  LOG_D("target_state_setter was %d and just got value %d", oldState, newState);
-
-  if (oldState == newState) {
-    LOG_D("State setter invoked but did not change. Skipping.");
-    return;
-  }
-
-  // 0: auto, 1: heat, 2:cool
-  switch(newState) {
-    case 0:
-      ac.setMode(kMideaACAuto);
-      break;
-    case 1:
-      LOG_D("heating not supported");
-      return;
-    case 2:
-      ac.setMode(kMideaACCool);
-      break;
-  }
-
-  flipQueueCommand(true);
+    LOG_D("NO_OP: target_state_setter. Got value %d", value.int_value);
 }
 
 void rotation_speed_setter(const homekit_value_t value) {
