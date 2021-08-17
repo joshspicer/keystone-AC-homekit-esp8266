@@ -25,7 +25,7 @@
         },
         {
             "name": "Arduino",
-            "compilerPath": "/Users/joshspicer/Library/Arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.0.0-newlib4.0.0-gnu23-48f7b08/bin/xtensa-lx106-elf-g++",
+            "compilerPath": "",
             "compilerArgs": [
                 "-U__STRICT_ANSI__",
                 "-w",

@@ -34,16 +34,18 @@ void my_accessory_identify(homekit_value_t _value) {
 homekit_characteristic_t cooler_active = HOMEKIT_CHARACTERISTIC_(ACTIVE, 0);
 
 // float; min 0, max 100, step 0.1, unit celsius
-homekit_characteristic_t current_temp = HOMEKIT_CHARACTERISTIC_(CURRENT_TEMPERATURE, 0);
+homekit_characteristic_t current_temp = HOMEKIT_CHARACTERISTIC_(CURRENT_TEMPERATURE, 37.8);
 
-// 0:Off, 1:Idle,  2:Heating, 3:Cooling
 homekit_characteristic_t current_state = HOMEKIT_CHARACTERISTIC_(CURRENT_HEATER_COOLER_STATE, 0);
 
-// float: 10-35
+// 0: auto, 1: heat, 2:cool
 homekit_characteristic_t target_state = HOMEKIT_CHARACTERISTIC_(TARGET_HEATER_COOLER_STATE, 0);
 
 // float 0-100
 homekit_characteristic_t rotation_speed = HOMEKIT_CHARACTERISTIC_(ROTATION_SPEED, 0);
+
+// float 10-35
+homekit_characteristic_t cooling_threshold = HOMEKIT_CHARACTERISTIC_(COOLING_THRESHOLD_TEMPERATURE, 22);
 
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_air_conditioner, .services=(homekit_service_t*[]) {
@@ -62,6 +64,7 @@ homekit_accessory_t *accessories[] = {
            &current_state,
            &target_state,
            &rotation_speed,
+           &cooling_threshold,
            NULL
        }),
         NULL
