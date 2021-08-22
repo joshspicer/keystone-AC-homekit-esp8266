@@ -1,10 +1,13 @@
-
 /*
-*
-*
-*
-*/
-
+ *  Modified on: 2021-08-10
+ *  Josh Spicer <hello@joshspicer.com>
+ *  Writeup: http://spcr.me/aircon-homekit
+ *      
+ *  Built with the following libraries:
+ *     https://github.com/Mixiaoxiao/Arduino-HomeKit-ESP8266 
+ *     https://github.com/crankyoldgit/IRremoteESP8266
+ *
+ */
 
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
