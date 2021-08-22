@@ -8,12 +8,12 @@
 #endif
 
 /*
- * wifi_info.h
- * From: https://github.com/Mixiaoxiao/Arduino-HomeKit-ESP8266/blob/master/examples/Example02_Switch/wifi_info.h
- */
+   wifi_info.h
+   From: https://github.com/Mixiaoxiao/Arduino-HomeKit-ESP8266/blob/master/examples/Example02_Switch/wifi_info.h
+*/
 
-const char *ssid = "latte";
-const char *password = "****";
+const char *ssid = "your_ssid";
+const char *password = "";
 
 void wifi_connect() {
   WiFi.persistent(false);
